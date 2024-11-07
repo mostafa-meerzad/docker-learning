@@ -86,3 +86,175 @@ to run the image in the terminal run `docker run image-name` for e,x:
 PS D:\Courses\Docker\docker-learning> docker run hello-docker-new
 Hello Docker!
 ```
+
+## Essential Linux Commands
+
+### Running Linux
+
+first install **Ubuntu**
+
+`docker pull ubuntu` to get it from the docker-hub but if you run `docker run ubuntu` instead it's gonna run it if it finds it in local machine otherwise will pull it from the docker-hub
+
+`docker ps` shows the running containers
+
+`docker ps -a` shows all the containers stopped/running
+
+`docker run -it imageName` to run a container and interact with it `-it` stands for interactive
+
+to start ubuntu container in interactive mode `docker run -it ubuntu`
+
+this is the shell `root@0c53e4ac76ca:/#`, `root` is the default user with the highest privileges, `@0c53e4ac76ca` is the machine id, `#` indicates that the current user is the **root** if you log-in as normal user that symbol will be `$`
+
+`echo` prints whatever you put after it in the terminal
+
+`echo $0` prints the location of bash or the shell
+
+`history` prints all the recently used commands
+
+`Note`: bash is case-sensitive
+
+```terminal
+
+root@0c53e4ac76ca:/#
+root@0c53e4ac76ca:/# echo hello
+hello
+root@0c53e4ac76ca:/# echo $0
+/bin/bash
+root@0c53e4ac76ca:/# Echo $0
+bash: Echo: command not found
+root@0c53e4ac76ca:/# history
+    1  echo hello
+    2  echo $0
+    3  Echo $0
+    4  history
+
+```
+
+### Managing Packages
+
+In Ubuntu we have `apt` which stands for **advanced package tool**
+
+```terminal
+
+root@0c53e4ac76ca:/# apt
+apt 2.7.14 (amd64)
+Usage: apt [options] command
+
+apt is a commandline package manager and provides commands for
+searching and managing as well as querying information about packages.
+It provides the same functionality as the specialized APT tools,
+like apt-get and apt-cache, but enables options more suitable for
+interactive use by default.
+
+Most used commands:
+  list - list packages based on package names
+  search - search in package descriptions
+  show - show package details
+  install - install packages
+  reinstall - reinstall packages
+  remove - remove packages
+  autoremove - automatically remove all unused packages
+  update - update list of available packages
+  upgrade - upgrade the system by installing/upgrading packages
+  full-upgrade - upgrade the system by removing/installing/upgrading packages
+  edit-sources - edit the source information file
+  satisfy - satisfy dependency strings
+
+See apt(8) for more information about the available commands.
+Configuration options and syntax is detailed in apt.conf(5).
+Information about how to configure sources can be found in sources.list(5).
+Package and version choices can be expressed via apt_preferences(5).
+Security details are available in apt-secure(8).
+                                        This APT has Super Cow Powers.
+```
+
+install a package `nano` which is a simple text-editor for commandline
+
+```terminal
+root@0c53e4ac76ca:/# apt install nano
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+E: Unable to locate package nano
+```
+
+that is saying that the **nano** is not listed in the package-database of ubuntu, run `apt list` to see all the packages but not all the packages we need is listed there by default! that is when you run `apt update` to update the package-database. now you can install `nano`
+
+### Linux File System
+
+The Linux file system is structured in a hierarchical, tree-like directory format that organizes files and directories in a top-down approach, beginning from the root directory. Each directory can contain files and subdirectories, and it is designed to keep system and user data organized and accessible. Here are the key parts:
+
+#### 1. **Root Directory (/)**
+
+- The top level of the Linux file system, represented by a single forward slash (`/`).
+- All other files and directories are contained within this root directory.
+
+#### 2. **Key Directories in the Root**
+
+- **/bin**: Essential command binaries needed for system operation, including basic commands like `ls`, `cp`, and `mv`. These commands are necessary for both regular users and the root user.
+
+- **/sbin**: System binaries, mainly for administrative commands (like `shutdown`, `reboot`, `fdisk`) that are typically restricted to the root user.
+
+- **/usr**: Contains user binaries and programs. It's one of the largest directories and includes subdirectories like `/usr/bin` (user commands), `/usr/lib` (libraries), and `/usr/share` (shared files).
+
+- **/home**: Contains directories for each user on the system. For example, if there’s a user named "alex", they would have a directory `/home/alex` for personal files and settings.
+
+- **/var**: Stands for "variable" and stores data that frequently changes, such as log files (`/var/log`), spool files, and temporary files used by applications.
+
+- **/etc**: Stores system configuration files and shell scripts used to boot and initialize system settings. Examples include network configuration files, user account details, and application settings.
+
+- **/tmp**: Temporary files created by system processes or users. Data in this directory is often deleted upon reboot.
+
+- **/dev**: Contains device files, which represent hardware components like hard drives (`/dev/sda`), USB drives, and other peripherals. Linux treats these devices as files, allowing you to interact with hardware through the file system.
+
+- **/lib**: Essential shared libraries required by binaries in `/bin` and `/sbin`.
+
+- **/proc**: A virtual file system providing runtime system information, like process details, CPU info, and memory usage. Files here are generated dynamically by the system.
+
+- **/boot**: Contains bootloader-related files, like the kernel and initial ramdisk, necessary for booting the system.
+
+- **/opt**: Used for optional, add-on software packages that are not part of the default installation. It’s often used for third-party applications.
+
+- **/mnt and /media**: Directories for temporarily mounting filesystems, like USB drives or CD-ROMs. `/mnt` is a general-purpose mount point, while `/media` is typically used by desktops to auto-mount devices.
+
+- **/root**: The home directory for the root (superuser) account, separate from other user directories.
+
+#### 3. **File Types**
+
+- **Regular files**: Normal files that store data, text, and code.
+- **Directory files**: Containers for other files and directories.
+- **Device files**: Represent hardware devices, allowing the system to interact with them as if they were files.
+- **Symbolic links**: Shortcuts that point to other files or directories.
+- **Sockets and Named Pipes**: Used for inter-process communication (IPC).
+
+#### 4. **Permissions and Ownership**
+
+- Each file has permissions for the owner, group, and others, defining read, write, and execute rights.
+- Ownership includes both a user (owner) and a group, which is essential for access control and system security.
+
+#### 5. **Mounting and Unmounting**
+
+- External devices or partitions need to be "mounted" to be accessible within the Linux filesystem.
+- The `mount` and `umount` commands are used to attach and detach filesystems to specific directories within the hierarchy.
+
+Linux's structure may initially seem complex, but it is organized this way to make it logical, flexible, and powerful, especially for administrators managing various applications and services.
+
+### Navigating the File System
+
+`pwd` (print working directory) to see where we are in the file-system
+
+`ls` (list) to list all the files and directories in the path you are shows all in multiple lines `ls -1` to list them in one line
+
+The `ls -l` command in Linux lists files and directories in the current directory in **long format**. Each line in the output provides detailed information about a file or directory, organized into columns. Here’s what each part of the output represents:
+
+```terminal
+drwxr-xr-x  2 user group 4096 Nov  7 10:30 Documents
+-rw-r--r--  1 user group  123 Nov  7 11:00 file.txt
+```
+
+`cd path/you/want/to/go` (change directory) changes directory to the absolute/relative path provided (absolute path always starts with /)
+
+`cd ..` to go one level back `cd ../..` to go two levels back
+
+`cd ~` to go to the **home** directory for normal users, the **root** user has a special home directory called **root**
+
