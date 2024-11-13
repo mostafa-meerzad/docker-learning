@@ -258,3 +258,12 @@ drwxr-xr-x  2 user group 4096 Nov  7 10:30 Documents
 
 `cd ~` to go to the **home** directory for normal users, the **root** user has a special home directory called **root**
 
+### Manipulating Files and Directories
+
+`mkdir` to create a new directory `mkdir myDirectory`
+
+`touch` to create a new file `touch myFile.sh` to create a shell file or `touch test.txt`
+
+`mv` to move or rename a file `mv oldName.txt newName.txt` or `mv prev/location/name.txt new/location/name.txt`
+
+`rm` to remove files or directories `rm test.txt` remove test.txt file, `rm myDirectory -r` to remove a directory `-r` stands for **recursive**
