@@ -327,3 +327,21 @@ to store the result of long listing into longlist.txt file
 `<` is the **redirection** operator for changing the **standard input**
 
 **Note**: there might not be much use cases for this command
+
+## Searching for Text
+
+For searching a text in a file there is `grep` command **"Global Regular Expression Print"**, `grep options regex path/to/file.txt`.
+
+1. searching in a single file:
+   `grep -i hello hello.txt`
+2. searching multiple files
+   `grep -i hello file1.txt file2.txt`
+3. searching multiple files using a pattern for the files
+   `grep -i hello file*`
+   **Note**: searching all files with their names starting with **file**
+4. searching in a directory and all it's sub-directories
+   `grep -i -r hello /path/to/dir`
+   **Note**: `-r` is for **recursive** `-i` is for **case insensitive**
+
+**Note**: In Linux you can combine options like this: `-i -r` into `-ir`
+
