@@ -267,3 +267,17 @@ drwxr-xr-x  2 user group 4096 Nov  7 10:30 Documents
 `mv` to move or rename a file `mv oldName.txt newName.txt` or `mv prev/location/name.txt new/location/name.txt`
 
 `rm` to remove files or directories `rm test.txt` remove test.txt file, `rm myDirectory -r` to remove a directory `-r` stands for **recursive**
+
+## Editing and Viewing Files
+
+use `nano` which is a basic text editor for terminal:
+
+in the terminal run `nano` to run the editor, you can optionally give it a file name to open if exists otherwise create or cancel creation by pressing `Ctrl + x`
+
+`cat` command (concatenation) used to view content of small files, for long files it's better to use `more` command to view the large file piece by piece also gives you a **percentage** of how much of the file has viewed, with `more` you can only scroll down by pressing `Enter` key.
+
+`less` is a newer command to replace `more` thus might not be installed by default, first install `apt install less`, now you can view content of a long file and also be able to scroll up and down.
+
+`head -n 5 file/path/test.txt` to get the first 5 lines from the **head/top** of the file,
+
+`tail -n 5 file/path/test.txt` to get the last 5 lines from the **tail/bottom** of the file
