@@ -281,3 +281,49 @@ in the terminal run `nano` to run the editor, you can optionally give it a file 
 `head -n 5 file/path/test.txt` to get the first 5 lines from the **head/top** of the file,
 
 `tail -n 5 file/path/test.txt` to get the last 5 lines from the **tail/bottom** of the file
+
+## Redirection
+
+In linux the standard **input** and **output** is **keyboard** and **terminal** but we can change it this is called **redirection**.
+
+ex: when we use `cat file.txt` it reads the content of the **file.txt** and prints it on the **standard output** but we can change it using the **redirection operation** `>`.
+
+`cat file.txt > file2.txt`, here we redirect the output of the **cat** command which to **file2.txt**
+
+`cat` can also be used to combine the output of multiple files into one, as following:
+
+create two files "numbers.txt" and "letters.txt":
+
+```terminal
+
+root@f637cef4b947:/# echo "1 2 3 4 5" > numbers.txt
+root@f637cef4b947:/# cat numbers.txt
+1 2 3 4 5
+root@f637cef4b947:/# echo "a b c d e" > letters.txt
+root@f637cef4b947:/# cat letters.txt
+a b c d e
+
+```
+
+use **cat** and **>** to combine "numbers.txt" and "letters.txt"
+
+```terminal
+
+root@f637cef4b947:/# cat numbers.txt letters.txt > alphanumeric.txt
+root@f637cef4b947:/# cat alphanumeric.txt
+1 2 3 4 5
+a b c d e
+
+```
+
+the **redirection** `>` is not limited to **cat** or **echo** you can use it along with other commands as well
+
+```terminal
+root@f637cef4b947:/# ls -l > longlist.txt
+```
+
+to store the result of long listing into longlist.txt file
+
+`<` is the **redirection** operator for changing the **standard input**
+
+**Note**: there might not be much use cases for this command
