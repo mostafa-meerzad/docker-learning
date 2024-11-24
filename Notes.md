@@ -362,3 +362,82 @@ The `find` command can be used for searching and finding files and directories.
 `find /etc -type f -name "f*"` find all the files their names starting with **f** in **/etc** directory
 `find /etc -type f -iname "f*"` the same as above but not case-sensitive
 
+## Chaining Commands
+
+In linux we can chain commands so you can wire multiple commands and run them in one go
+
+`mkdir test ; cd test ; echo hello > text.txt ; echo Done` separate commands with `;`, if one of the commands in this chain fails to execute you would see the failure message but the rest of the will execute!
+
+`mkdir test && cd test && echo hello > text.txt && echo Done` by separating commands with `&&` if one command fails to execute the rest won't be executed. the **and** operator.
+
+`mkdir test || echo "Directory exists"` we can also use **or** operator to make a fail-save command chain,
+if the left side executes with no problems the right side won't be executed but if the left side fails the right side command will execute.
+
+we can also make command chains more readable by putting `;\` at the end of each command which takes us to a new-line, to finish the chain put `;` at the end of the last command
+
+```terminal
+mkdir /mydir;\
+echo hello > test.txt;\
+cd myDir;\
+cat test.txt;
+```
+
+## Pipe
+
+In the Linux command line, the `|` symbol, called a **pipe**, is used to pass the output of one command as the input to another command. It is a powerful tool that allows you to create command pipelines, chaining commands together to perform complex tasks.
+
+### How it works:
+
+1. The command on the left of the pipe (`|`) generates some output.
+2. The command on the right of the pipe takes this output as its input.
+
+### Common use cases:
+
+1. **Filtering text with `grep`:**
+
+   ```bash
+   ls -l | grep "myfile"
+   ```
+
+   - The `ls -l` command lists files in long format.
+   - The `grep "myfile"` filters the output to show only lines containing "myfile".
+
+2. **Sorting data with `sort`:**
+
+   ```bash
+   cat data.txt | sort
+   ```
+
+   - The `cat data.txt` command outputs the contents of `data.txt`.
+   - The `sort` command sorts the lines alphabetically.
+
+3. **Counting lines, words, or characters with `wc`:**
+
+   ```bash
+   cat data.txt | wc -l
+   ```
+
+   - The `cat data.txt` command outputs the file content.
+   - The `wc -l` counts the number of lines in the output.
+
+4. **Paginating output with `less`:**
+
+   ```bash
+   ps aux | less
+   ```
+
+   - The `ps aux` command shows all running processes.
+   - The `less` command allows you to view the output one screen at a time.
+
+5. **Chaining multiple commands:**
+   ```bash
+   dmesg | grep error | sort | less
+   ```
+   - This finds all lines with "error" in the system log (`dmesg`), sorts them, and displays them in a scrollable view.
+
+### Benefits:
+
+- **Efficiency:** You avoid creating temporary files for intermediate steps.
+- **Modularity:** Commands can be combined in flexible ways to perform complex tasks.
+
+Would you like examples for a specific command or situation?
