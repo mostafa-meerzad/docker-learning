@@ -345,3 +345,20 @@ For searching a text in a file there is `grep` command **"Global Regular Express
 
 **Note**: In Linux you can combine options like this: `-i -r` into `-ir`
 
+## Finding Files and Directories
+
+The `find` command can be used for searching and finding files and directories.
+
+`find` with no options/parameters returns all the files and directories in the current directory
+
+`find path` `find /etc` finds/lists all the files and directories in the specified path
+
+`find -type d` find all the directories, `d` stands for **directory**
+
+`find -type f` find all the files, `f` stands for **file**
+
+`find -type f -name "f*"` find all the files their names starting with **f**
+
+`find /etc -type f -name "f*"` find all the files their names starting with **f** in **/etc** directory
+`find /etc -type f -iname "f*"` the same as above but not case-sensitive
+
