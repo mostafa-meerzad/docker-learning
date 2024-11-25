@@ -591,3 +591,47 @@ To preserve an env between different session you need to write it in a special f
 
 `echo COLOR=red >> ~/.bashrc` and if you try accessing it right away it won't work `echo $COLOR` this will not show any output! the reason is ".bashrc" file is loaded only once when you log-in to your system, to solve it we can restart the session or reload the ".bashrc" file, `source ~/.bashrc` this command will reload the file and now `echo $COLOR` will return `red`
 
+## Managing Processes
+
+A process is a running instance of a program
+
+to get all the running processes run `ps` in the terminal, you will get the following:
+
+```bash
+root@e6e83e022ee4:/# ps
+  PID TTY          TIME CMD
+    1 pts/0    00:00:00 bash
+   31 pts/0    00:00:00 ps
+```
+
+The output of the `ps` command lists the currently running processes in the shell environment. Here's what each column and entry indicates:
+
+1. **PID (Process ID):**  
+   - **1**: This is the PID of the `bash` process, indicating the current shell session. PID 1 is the parent process in this context, as it is typically the first process in a container or system environment.  
+   - **31**: This is the PID of the `ps` command itself, which is running to produce this output.
+
+2. **TTY (Terminal Type):**  
+   - **pts/0**: This indicates that both processes are running in the pseudo-terminal (PTY) `pts/0`, which is the terminal session you're interacting with.
+
+3. **TIME:**  
+   - **00:00:00**: This shows the CPU time used by the process so far. Both processes have not consumed any noticeable CPU time.
+
+4. **CMD (Command):**  
+   - **bash**: The `bash` process represents the shell you're interacting with.  
+   - **ps**: The `ps` command is the one being executed to list processes.
+
+to pause the execution process run `sleep 3` you can change the amount of time
+
+to put a process to the background just append `&` to the end of it like so `sleep 5 &` will put this process to the background and you will be brought back to bash to type your next command/s
+
+```bash
+root@e6e83e022ee4:/# sleep 30 &
+[1] 38
+root@e6e83e022ee4:/# ps
+  PID TTY          TIME CMD
+    1 pts/0    00:00:00 bash
+   38 pts/0    00:00:00 sleep
+   39 pts/0    00:00:00 ps
+```
+
+to stop a process run `kill 38` 38 here being the process-id you get by running `ps` 
