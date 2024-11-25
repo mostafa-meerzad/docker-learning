@@ -705,3 +705,46 @@ john@e6e83e022ee4:/$
 
 when working with docker we don't want to use **adduser** because it is interactive and we don't want that in our docker files.
 
+## Managing Groups
+
+Why to use groups? 
+
+Users in the same group have the same kind of permission/s
+
+`groupadd` for adding a group
+`groupmod` for modifying a group
+`groupdel` for deleting a group
+
+
+### Create a Group
+
+`groupadd developers` create a group named developers
+
+groups are stored in `/etc/group` at the end of this file your newly crated group must be
+
+`developers:x:1002:`
+
+### Add a User to a Group
+
+`usermod` has `-g` for setting the primary group of the user, and `-G` for setting the supplementary group
+
+**Note**:
+Every Linux user has one **primary** group and zero or more **supplementary** groups
+![groups](/groups.png)
+
+if **john** is part of 5 groups and wants to create a new file (every file is owned and stored in only one group!) now which group should be used for this file!
+
+that is why we need to have primary groups, primary group is automatically created when we create a new user with the same name as the user. 
+
+```bash
+root@e6e83e022ee4:/# usermod -G developers john # add john to developers group
+
+root@e6e83e022ee4:/# groups john # get the groups john is added to
+john : john developers
+```
+
+#### Add a User to Multiple Groups
+
+at one command `usermod -G groupOne, groupTwo, groupThree userName` `usermod -G developers, artists john`
+
+one at a time `sudo usermod -aG group1 username` `usermod -aG developers, artists john`, `-aG` **-a**  and **-G** are combined, `append group` 
