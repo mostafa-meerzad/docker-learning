@@ -87,6 +87,86 @@ PS D:\Courses\Docker\docker-learning> docker run hello-docker-new
 Hello Docker!
 ```
 
+The `docker run` and `docker start` commands are used to manage Docker containers, but they serve different purposes in the container lifecycle. Here's a breakdown:
+
+---
+
+### **`docker run`**
+
+- **Purpose**:
+  The `docker run` command creates and starts a new container based on an image.
+
+- **Details**:
+
+  - If the specified image is not present locally, Docker will pull it from a Docker registry (e.g., Docker Hub).
+  - It combines the steps of creating a container (`docker create`) and starting it (`docker start`).
+  - The command can include options to specify ports, volumes, environment variables, and more.
+
+- **Syntax**:
+  ```bash
+  docker run [OPTIONS] IMAGE [COMMAND] [ARG...]
+  ```
+- **Common Options**:
+  - `-d`: Run the container in detached mode (in the background).
+  - `-it`: Start the container in interactive mode with a TTY.
+  - `--name`: Assign a name to the container.
+  - `-p`: Map a host port to a container port.
+  - `-v`: Mount a volume.
+- **Example**:
+  ```bash
+  docker run -d -p 8080:80 --name my-container nginx
+  ```
+  This creates and starts a container named `my-container` running the `nginx` image in detached mode, with port 8080 on the host mapped to port 80 in the container.
+
+---
+
+### **`docker start`**
+
+- **Purpose**:
+  The `docker start` command starts an existing, stopped container.
+
+- **Details**:
+
+  - It does not create a new container; you can only use it with a container that has already been created using `docker create` or previously stopped using `docker stop`.
+  - It cannot change options (e.g., port mappings, environment variables) that were set when the container was created.
+  - It is useful for restarting a container without having to recreate it.
+
+- **Syntax**:
+
+  ```bash
+  docker start [OPTIONS] CONTAINER
+  ```
+
+- **Common Options**:
+
+  - `-a`: Attach to the container’s output.
+  - `-i`: Keep STDIN open even if not attached.
+
+- **Example**:
+  ```bash
+  docker start my-container
+  ```
+  This starts the container named `my-container` if it exists and is stopped.
+
+---
+
+### **Comparison**
+
+| Feature                   | `docker run`                       | `docker start`                 |
+| ------------------------- | ---------------------------------- | ------------------------------ |
+| **Creates a container**   | Yes                                | No                             |
+| **Starts a container**    | Yes                                | Yes                            |
+| **Pulls image**           | If not already present             | No                             |
+| **Changes configuration** | Yes (at creation)                  | No                             |
+| **Use case**              | Initial container setup and launch | Restarting a stopped container |
+
+---
+
+In summary:
+
+- Use **`docker run`** to create and start a new container.
+- Use **`docker start`** to restart an existing, stopped container.
+
 ## Essential Linux Commands
 
 ### Running Linux
@@ -441,3 +521,73 @@ In the Linux command line, the `|` symbol, called a **pipe**, is used to pass th
 - **Modularity:** Commands can be combined in flexible ways to perform complex tasks.
 
 Would you like examples for a specific command or situation?
+
+## Environment Variables
+
+### What Are Environment Variables?
+
+Environment variables are key-value pairs used to store configuration data and settings for software applications. They are often defined outside the application code, making them accessible globally to the application without being hardcoded. They allow developers to manage settings like database credentials, API keys, ports, and other environment-specific details.
+
+For example:
+
+```bash
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=supersecret
+```
+
+### Importance of Environment Variables
+
+1. **Separation of Code and Configuration**  
+   By using environment variables, configuration details like API keys or database URLs are not hardcoded into the source code. This separation makes code more portable and easier to maintain.
+
+2. **Security**  
+   Sensitive information such as passwords or API keys can be stored as environment variables rather than being included in the codebase. This minimizes the risk of accidentally exposing sensitive data if the code is shared publicly.
+
+3. **Flexibility**  
+   Environment variables allow applications to behave differently in different environments (e.g., development, testing, production) without changing the code. For instance:
+
+   - **Development**: `DB_HOST=localhost`
+   - **Production**: `DB_HOST=prod-db.example.com`
+
+4. **Simplifies Deployment**  
+   Using environment variables streamlines the deployment process. The same application code can run in multiple environments simply by changing the environment variable values.
+
+5. **Ease of Updates**  
+   Changing configuration values is as simple as updating environment variables, avoiding the need to modify and redeploy code.
+
+6. **Prevents Configuration Drift**  
+   Centralizing configuration settings in environment variables helps avoid inconsistencies across environments.
+
+### Examples of Usage
+
+to get a specific environment variable
+
+```bash
+printenv PATH # get PATH env using "printenv"
+
+echo $PATH # get PATH env using "echo" but you need to prefix the variable with "$"
+```
+
+to set a specific environment variable
+
+```bash
+export  DB_USER=mostafa
+```
+
+usage:
+
+```bash
+root@e6e83e022ee4:/# export DB_USER=mostafa
+root@e6e83e022ee4:/# echo $DB_USER
+mostafa
+```
+
+**Note**: setting an environment variable this way it's only set and accessible in this current terminal session, if you close it and then come back it won't be accessible.
+
+### Preserve Environment Variables
+
+To preserve an env between different session you need to write it in a special file `~/.bashrc` which holds all user specific env files
+
+`echo COLOR=red >> ~/.bashrc` and if you try accessing it right away it won't work `echo $COLOR` this will not show any output! the reason is ".bashrc" file is loaded only once when you log-in to your system, to solve it we can restart the session or reload the ".bashrc" file, `source ~/.bashrc` this command will reload the file and now `echo $COLOR` will return `red`
+
