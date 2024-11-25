@@ -681,7 +681,7 @@ passwords are stored in `/etc/shadow` which is only accessible to the root user 
 
 ### Loging as another user
 
-`docker ps` to get running containers 
+`docker ps` to get running containers
 
 ```bash
 PS D:\Courses\Docker\docker-learning> docker ps
@@ -697,9 +697,10 @@ but with above docker commands we log-in as **root** user, for **john** run `doc
 
 ```bash
 PS D:\Courses\Docker\docker-learning> docker exec -it -u john e6e83e022ee4 bash
-john@e6e83e022ee4:/$ 
+john@e6e83e022ee4:/$
 ```
-`$` shows that **john** is a regular user 
+
+`$` shows that **john** is a regular user
 
 **NOTE**: The **useradd** command is lower level and available on all Linux distributions. It requires additional parameters to set up the account entirely. The **adduser** command is higher level and not available on all Linux distributions. The command adds a user to the system with standard settings.
 
@@ -707,14 +708,13 @@ when working with docker we don't want to use **adduser** because it is interact
 
 ## Managing Groups
 
-Why to use groups? 
+Why to use groups?
 
 Users in the same group have the same kind of permission/s
 
 `groupadd` for adding a group
 `groupmod` for modifying a group
 `groupdel` for deleting a group
-
 
 ### Create a Group
 
@@ -734,7 +734,7 @@ Every Linux user has one **primary** group and zero or more **supplementary** gr
 
 if **john** is part of 5 groups and wants to create a new file (every file is owned and stored in only one group!) now which group should be used for this file!
 
-that is why we need to have primary groups, primary group is automatically created when we create a new user with the same name as the user. 
+that is why we need to have primary groups, primary group is automatically created when we create a new user with the same name as the user.
 
 ```bash
 root@e6e83e022ee4:/# usermod -G developers john # add john to developers group
@@ -747,4 +747,131 @@ john : john developers
 
 at one command `usermod -G groupOne, groupTwo, groupThree userName` `usermod -G developers, artists john`
 
-one at a time `sudo usermod -aG group1 username` `usermod -aG developers, artists john`, `-aG` **-a**  and **-G** are combined, `append group` 
+one at a time `sudo usermod -aG group1 username` `usermod -aG developers, artists john`, `-aG` **-a** and **-G** are combined, `append group`
+
+## File Permissions
+
+File permissions in Linux define what actions users can perform on a file or directory. These permissions control access to files and directories for three distinct user categories: **owner**, **group**, and **others**.
+
+---
+
+### **Structure of File Permissions**
+
+You can view file permissions using the `ls -l` command. Here’s an example output:
+
+```bash
+-rw-r--r--  1 user group  1234 Nov 25 14:00 example.txt
+```
+
+#### Breakdown:
+
+1. **File Type and Permissions (`-rw-r--r--`)**:
+
+   - The first character indicates the file type:
+     - `-`: Regular file
+     - `d`: Directory
+     - `l`: Symbolic link
+     - `c`: Character device
+     - `b`: Block device
+   - The next 9 characters are divided into three groups of 3:
+     - **`rw-`**: Owner's permissions
+     - **`r--`**: Group's permissions
+     - **`r--`**: Others' permissions
+
+2. **Number of Links (`1`)**: Number of hard links to the file.
+
+3. **Owner (`user`)**: The username of the file's owner.
+
+4. **Group (`group`)**: The group assigned to the file.
+
+5. **Size (`1234`)**: File size in bytes.
+
+6. **Timestamp (`Nov 25 14:00`)**: Last modification date and time.
+
+7. **Name (`example.txt`)**: The name of the file.
+
+---
+
+### **Permission Components**
+
+Each permission group (`rwx`) is explained as:
+
+- **r (read)**: Allows reading the file's contents or listing a directory's contents.
+- **w (write)**: Allows modifying the file's contents or creating/deleting files in a directory.
+- **x (execute)**: Allows running the file as a program or accessing a directory.
+
+#### Example:
+
+- `rw-` = Read (✔), Write (✔), Execute (✘)
+
+---
+
+### **User Categories**
+
+1. **Owner**: The user who owns the file.
+2. **Group**: Other users in the file's assigned group.
+3. **Others**: All other users.
+
+#### Example:
+
+For `-rw-r--r--`:
+
+- Owner can **read and write**.
+- Group can **read only**.
+- Others can **read only**.
+
+---
+
+### **Changing Permissions**
+
+You can modify permissions using the `chmod` command.
+
+#### Symbolic Mode:
+
+- **Add**: `chmod u+w filename` (Add write permission for owner)
+- **Remove**: `chmod g-r filename` (Remove read permission for group)
+- **Set Exact**: `chmod o=rx filename` (Set others' permissions to read and execute only)
+
+#### Numeric (Octal) Mode:
+
+Each permission is represented by a number:
+
+- `r = 4`, `w = 2`, `x = 1`, `- = 0`
+
+Combine numbers for each group:
+
+- `7` = `rwx`
+- `6` = `rw-`
+- `5` = `r-x`
+- `4` = `r--`
+
+Command:
+
+```bash
+chmod 754 filename
+```
+
+#### Example:
+
+- **Owner**: `7` = `rwx`
+- **Group**: `5` = `r-x`
+- **Others**: `4` = `r--`
+
+---
+
+### **Changing Ownership**
+
+Use the `chown` and `chgrp` commands:
+
+- Change owner: `sudo chown new_owner filename`
+- Change group: `sudo chgrp new_group filename`
+
+---
+
+### Summary Table of Permissions:
+
+| Permission  | Owner | Group | Others |
+| ----------- | ----- | ----- | ------ |
+| `rwx------` | ✔     | ✘     | ✘      |
+| `rwxr-x---` | ✔     | ✔     | ✘      |
+| `rw-r--r--` | ✔     | ✔     | ✔      |
