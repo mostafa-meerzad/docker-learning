@@ -606,18 +606,21 @@ root@e6e83e022ee4:/# ps
 
 The output of the `ps` command lists the currently running processes in the shell environment. Here's what each column and entry indicates:
 
-1. **PID (Process ID):**  
-   - **1**: This is the PID of the `bash` process, indicating the current shell session. PID 1 is the parent process in this context, as it is typically the first process in a container or system environment.  
+1. **PID (Process ID):**
+
+   - **1**: This is the PID of the `bash` process, indicating the current shell session. PID 1 is the parent process in this context, as it is typically the first process in a container or system environment.
    - **31**: This is the PID of the `ps` command itself, which is running to produce this output.
 
-2. **TTY (Terminal Type):**  
+2. **TTY (Terminal Type):**
+
    - **pts/0**: This indicates that both processes are running in the pseudo-terminal (PTY) `pts/0`, which is the terminal session you're interacting with.
 
-3. **TIME:**  
+3. **TIME:**
+
    - **00:00:00**: This shows the CPU time used by the process so far. Both processes have not consumed any noticeable CPU time.
 
-4. **CMD (Command):**  
-   - **bash**: The `bash` process represents the shell you're interacting with.  
+4. **CMD (Command):**
+   - **bash**: The `bash` process represents the shell you're interacting with.
    - **ps**: The `ps` command is the one being executed to list processes.
 
 to pause the execution process run `sleep 3` you can change the amount of time
@@ -634,4 +637,71 @@ root@e6e83e022ee4:/# ps
    39 pts/0    00:00:00 ps
 ```
 
-to stop a process run `kill 38` 38 here being the process-id you get by running `ps` 
+to stop a process run `kill 38` 38 here being the process-id you get by running `ps`
+
+## Managing Users
+
+### Commands
+
+`useradd` for adding a new user
+
+`usermod` for modifying a user
+
+`userdel` for deleting a user
+
+running each one of above with no options will return all the possible options which you can use and they are optional
+
+### Crate a user
+
+`useradd -m john` the created user is stored in a environment variable in `etc` directory `/etc/passwd`
+
+`cat /etc/passwd` and the newly crated user must be at the bottom of this file
+
+`john:x:1001:1001::/home/john:/bin/sh`
+
+here we have multiple fields separated with `:`,
+
+`x` is password which is stored somewhere else,
+
+1001 is user-id,
+
+the next 1001 is group-id,
+
+`:/home/john` is the user's home directory,
+
+`/bin/sh` is the shell program used when this user logs in
+
+### Modify the user
+
+`usermod -s /bin/bash john`, modify user, set shell to bash, for user john
+
+if now you run `cat /etc/passwd` the shell part for the user **john** is changed `john:x:1001:1001::/home/john:/bin/bash`
+
+passwords are stored in `/etc/shadow` which is only accessible to the root user `cat /etc/shadow` will show all the stored passwords in encrypted form.
+
+### Loging as another user
+
+`docker ps` to get running containers 
+
+```bash
+PS D:\Courses\Docker\docker-learning> docker ps
+CONTAINER ID   IMAGE     COMMAND       CREATED        STATUS        PORTS     NAMES
+e6e83e022ee4   ubuntu    "/bin/bash"   13 hours ago   Up 10 hours             modest_davinci
+```
+
+we want to execute a bash session inside this `ubuntu` container,
+
+run `docker exec e6e83e022ee4 bash` or for interactive mode run `docker exec -it e6e83e022ee4 bash`
+
+but with above docker commands we log-in as **root** user, for **john** run `docker exec -it -u john e6e83e022ee4 bash`
+
+```bash
+PS D:\Courses\Docker\docker-learning> docker exec -it -u john e6e83e022ee4 bash
+john@e6e83e022ee4:/$ 
+```
+`$` shows that **john** is a regular user 
+
+**NOTE**: The **useradd** command is lower level and available on all Linux distributions. It requires additional parameters to set up the account entirely. The **adduser** command is higher level and not available on all Linux distributions. The command adds a user to the system with standard settings.
+
+when working with docker we don't want to use **adduser** because it is interactive and we don't want that in our docker files.
+
